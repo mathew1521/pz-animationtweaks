@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.mathew1521'
+version = '0.4.0'
+
+def zombieBuddyJar = providers.gradleProperty('zombieBuddyJar')
+    .orElse(providers.environmentVariable('ZOMBIE_BUDDY_JAR'))
+    .orNull
+def pzClasspath = providers.gradleProperty('pzClasspath')
+    .orElse(providers.environmentVariable('PZ_CLASSPATH'))
+    .orNull
+
+if (zombieBuddyJar == null || pzClasspath == null) {
+    throw new GradleException(
+        'Set -PzombieBuddyJar and -PpzClasspath (or ZOMBIE_BUDDY_JAR and PZ_CLASSPATH).'
+    )
+}
+
+dependencies {
+    compileOnly files(zombieBuddyJar)
+    compileOnly files(pzClasspath.split(java.io.File.pathSeparator))
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 17
+}
+
+tasks.named('jar', Jar) {
+    archiveFileName = 'AnimationTweaks.jar'
+    destinationDirectory = layout.projectDirectory.dir('common/media/java/client')
+}

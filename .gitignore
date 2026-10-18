@@ -1,0 +1,12 @@
+.gradle/
+build/
+**/build/
+*.class
+
+# Local game assets and build output
+common/media/java/client/AnimationTweaks.jar
+common/media/java/client/AnimationTweaks.jar.zbs
+
+# Local IDE and machine-specific settings
+.idea/
+local.properties
